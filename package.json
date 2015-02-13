@@ -2,16 +2,32 @@
   "name": "foodies",
   "version": "0.0.0",
   "description": "A prototype menu maker app",
-  "main": "app.js",
+  "repository": "https://github.com/nijk/foodies",
+  "main": "js/app.js",
   "dependencies": {
     "fluxxor": "^1.5.2",
     "flux": "^2.0.1",
     "react": "^0.12.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "browserify": "^6.2.0",
+    "envify": "^3.0.0",
+    "jest-cli": "~0.1.17",
+    "reactify": "^0.15.2",
+    "uglify-js": "~2.4.15",
+    "watchify": "^2.1.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "watchify -o js/bundle.js -v -d .",
+    "build": "NODE_ENV=production browserify . | uglifyjs -cm > js/bundle.min.js",
+    "test": "jest"
   },
   "author": "",
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
+  },
   "license": "ISC"
 }
