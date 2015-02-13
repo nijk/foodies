@@ -1,7 +1,7 @@
 # Foodies app
 ---------------
 
-Provides an interface for accessing and playing recipes
+Provides an interface for accessing and playing food recipe media
 
  todo:
  - define data structure
