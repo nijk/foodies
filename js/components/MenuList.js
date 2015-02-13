@@ -1,0 +1,67 @@
+/**
+ * Created by nickaspinall on 13/02/15.
+ */
+var React = require('react'),
+    Fluxxor = require('fluxxor'),
+    FluxMixin = Fluxxor.FluxMixin(React),
+    StoreWatchMixin = Fluxxor.StoreWatchMixin;
+
+
+var MenuList = React.createClass({
+  mixins: [FluxMixin, StoreWatchMixin('menu')],
+
+  getInitialState:function(){
+
+    // todo: Should state represent an boilerplate menu object from the store?
+    return {};
+  },
+
+  getStateFromFlux:function(){
+    var flux = this.getFlux(),
+        store = flux.store('menu');
+
+    return store.getState();
+  },
+
+  render:function(){
+
+    console.log(this.state);
+
+    return (
+      <div>
+        <ul>
+        {this.state.menus.map(function(menu, i){
+          return <li key={i}>{menu.name} <span class="summary">menu.summary</span></li>
+        })}
+        </ul>
+        <form onSubmit={this.onSubmitForm}>
+          <input type="text" size="30" placeholder="New Recipe"
+          value={this.state.newMenuItem}
+          onChange={this.handleMenuItemTextChange} />
+          <input type="submit" value="Add Menu item" />
+        </form>
+      </div>
+    );
+  },
+
+  handleMenuItemTextChange:function(e){
+    this.setState({newMenuItem: e.target.value});
+  },
+
+  onSubmitForm:function(e){
+
+    e.preventDefault();
+
+    if(this.state.newMenuItem.trim()) {
+
+      console.log(this.getFlux());
+
+      this.getFlux().actions.menu.createMenu({name: this.state.newMenuItem});
+      this.setState({newMenuItem: ''});
+    }
+  }
+
+
+});
+
+module.exports = MenuList;

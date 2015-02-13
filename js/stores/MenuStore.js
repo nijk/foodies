@@ -2,7 +2,9 @@
  * Created by nickaspinall on 13/02/15.
  */
 var React = require('react'),
-  Fluxxor = require('fluxxor');
+    Fluxxor = require('fluxxor'),
+    objectAssign = require('object-assign'),
+    constants = require('../constants/MenuConstants');
 
 
 var saveMenu = function(){
@@ -40,39 +42,29 @@ var menu = {
 };
 
 
-var constants = {
-  CREATE_MENU: 'CREATE_MENU',
-  DESTROY_MENU: 'DESTROY_MENU',
-  UPDATE_MENU: 'UPDATE_MENU'
-};
-
-
 var MenuStore = Fluxxor.createStore({
 
   initialize:function(){
-
     this.menus = [];
 
     // Fetch menus collection from persistent store
 
     this.bindActions(
-      constants.CREATE_MENU,
-      constants.DESTROY_MENU,
-      constants.UPDATE_MENU
+      constants.CREATE_MENU, this.onCreateMenu,
+      constants.DESTROY_MENU, this.onUpdateMenu,
+      constants.UPDATE_MENU, this.onDestroyMenu
     );
-
-    console.log(this.actions);
   },
 
   onCreateMenu:function(payload){
-    var newMenu = Object.assign({}, menu, payload.menu);
+    var newMenu = objectAssign({}, menu, payload.menu);
     this.menus.push(newMenu);
     this.emit('change');
   },
 
   onUpdateMenu:function(payload){
     var menuId = payload.menu.id,// @todo: decide how menu ids are set & retrieved
-      updatedMenu = Object.assign({}, menus[menuId], payload.menu);
+        updatedMenu = objectAssign({}, this.menus[menuId], payload.menu);
 
     this.menus[menuId] = updatedMenu;
     this.emit('change');
@@ -80,7 +72,7 @@ var MenuStore = Fluxxor.createStore({
 
   onDestroyMenu:function(payload){
     // Remove the menu from the collection
-      //Identify from payload value
+      // Identify from payload value
   },
 
   getState:function(){
@@ -92,26 +84,4 @@ var MenuStore = Fluxxor.createStore({
 
 });
 
-var actions = {
-  createMenu:function(menu){
-    this.dispatch(constants.CREATE_MENU, menu);
-  },
-  updateMenu:function(menu){
-    this.dispatch(constants.UPDATE_MENU, menu)
-  },
-  destroyMenu:function(){
-    this.dispatch(constants.DESTROY_MENU, id);
-  }
-}
-
-var stores = {
-  menuStore: new MenuStore()
-};
-
-var flux = Fluxxor.Flux(stores, actions);
-
-flux.on('dispatch', function(type, payload){
-  if (console && console.log()){
-    console.log("[Dispatch]", type, payload);
-  }
-});
+module.exports = MenuStore;
