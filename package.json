@@ -1,0 +1,17 @@
+{
+  "name": "foodies",
+  "version": "0.0.0",
+  "description": "A prototype menu maker app",
+  "main": "app.js",
+  "dependencies": {
+    "fluxxor": "^1.5.2",
+    "flux": "^2.0.1",
+    "react": "^0.12.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
