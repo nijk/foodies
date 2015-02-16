@@ -24,14 +24,14 @@ var MenuList = React.createClass({
   },
 
   render:function(){
-
-    console.log(this.state);
-
     return (
       <div>
         <ul>
-        {this.state.menus.map(function(menu, i){
-          return <li key={i}>{menu.name} <span class="summary">menu.summary</span></li>
+        {this.getStateFromFlux().menus.map(function(menu, i, menus){
+
+          //console.log(menu, i, menus);
+
+          return <li key={i}>{menu.title} <span className="summary">{menu.summary}</span></li>
         })}
         </ul>
         <form onSubmit={this.onSubmitForm}>
@@ -49,14 +49,9 @@ var MenuList = React.createClass({
   },
 
   onSubmitForm:function(e){
-
     e.preventDefault();
-
     if(this.state.newMenuItem.trim()) {
-
-      console.log(this.getFlux());
-
-      this.getFlux().actions.menu.createMenu({name: this.state.newMenuItem});
+      this.getFlux().actions.menu.createMenu({title: this.state.newMenuItem});
       this.setState({newMenuItem: ''});
     }
   }
