@@ -4,69 +4,35 @@
 var React = require('react'),
     Fluxxor = require('fluxxor'),
     objectAssign = require('object-assign'),
-    constants = require('../constants/MenuConstants');
-
-
-var saveMenu = function(){
-  //Save the menu
-    // Optimistic update pattern
-    // XHR request to API
-    // Handle Promise success/error
-};
-
-var getMenus = function(){
-  // Is this required?
-};
-
-var menu = {
-  title: '',
-  summary: '',
-  description: '',
-  meta: {
-    skillLevel: 1, // Int 1 - 5
-    timePrep: null, // Time value is seconds, displayed in mins or hours
-    timeCooking: null // Time value is seconds, displayed in mins or hours
-  },
-  // The ordered process of creation
-  menuSteps: {
-    // Preparation
-    prep: [
-      // {name: 'Prepare vegetables', {text: 'Wash all veg thoroughly. Top & tail carrots the slice length ways', video: {url: '//youtube.com/gdhg7564'}}}
-    ],
-    // Cooking
-    cook: {
-
-    }
-    // Post cook ?
-  }
-};
-
+    Constants = require('../Constants/MenuConstants'),
+    Recipes = require('../data/Recipes');
 
 var MenuStore = Fluxxor.createStore({
-
   initialize:function(){
-    this.menus = [];
+    this.menus = Recipes.data;
+    this.menuSample = Recipes._clone;
 
     // Fetch menus collection from persistent store
 
     this.bindActions(
-      constants.CREATE_MENU, this.onCreateMenu,
-      constants.DESTROY_MENU, this.onUpdateMenu,
-      constants.UPDATE_MENU, this.onDestroyMenu
+      Constants.CREATE_MENU, this.onCreateMenu,
+      Constants.DESTROY_MENU, this.onUpdateMenu,
+      Constants.UPDATE_MENU, this.onDestroyMenu
     );
   },
 
   onCreateMenu:function(payload){
-    var newMenu = objectAssign({}, menu, payload.menu);
+    var newMenu = objectAssign({}, this.menuSample, payload);
+
     this.menus.push(newMenu);
     this.emit('change');
   },
 
   onUpdateMenu:function(payload){
-    var menuId = payload.menu.id,// @todo: decide how menu ids are set & retrieved
-        updatedMenu = objectAssign({}, this.menus[menuId], payload.menu);
+    // @todo: decide how menu ids are set & retrieved
+    var menuId = payload.menu.id;
 
-    this.menus[menuId] = updatedMenu;
+    this.menus[menuId] = objectAssign({}, this.menus[menuId], payload.menu);
     this.emit('change');
   },
 
