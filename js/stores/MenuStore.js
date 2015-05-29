@@ -5,14 +5,29 @@ var React = require('react'),
     Fluxxor = require('fluxxor'),
     objectAssign = require('object-assign'),
     Constants = require('../Constants/MenuConstants'),
-    Recipes = require('../data/Recipes');
+    Recipes = require('../data/Recipes'),
+    MongoClient = require('../../node_modules/mongodb').MongoClient,
+    assert = require('assert');
+
+// Connection URL
+var url = 'mongodb://localhost:27017/foodies';
 
 var MenuStore = Fluxxor.createStore({
   initialize:function(){
     this.menus = Recipes.data;
     this.menuSample = Recipes._clone;
 
+    console.log('Hello store');
+
     // Fetch menus collection from persistent store
+
+    // Use connect method to connect to the Server
+    MongoClient.connect(url, function(err, db) {
+      assert.equal(null, err);
+      console.log("Connected correctly to server");
+
+      db.close();
+    });
 
     this.bindActions(
       Constants.CREATE_MENU, this.onCreateMenu,

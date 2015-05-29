@@ -50,6 +50,9 @@ var MenuList = React.createClass({
 
   onSubmitForm:function(e){
     e.preventDefault();
+
+    this.state.newMenuItem = this.state.newMenuItem || '';
+
     if(this.state.newMenuItem.trim()) {
       this.getFlux().actions.menu.createMenu({title: this.state.newMenuItem});
       this.setState({newMenuItem: ''});
